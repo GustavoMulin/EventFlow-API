@@ -15,6 +15,13 @@ import {
   deleteCategory
 } from "../controllers/CategoryController.js";
 
+import {
+  getAllLocations,
+  createLocation,
+  updateLocation,
+  deleteLocation
+} from "../controllers/LocationController.js";
+
 const router = express.Router();
 
 // Auth routes
@@ -34,5 +41,11 @@ router.get("/categories", getAllCategories);
 router.post("/categories", createCategory);
 router.put("/categories/:id", updateCategory);
 router.delete("/categories/:id", deleteCategory);
+
+// Location routes
+router.get("/locations", getAllLocations);
+router.post("/locations", createLocation);
+router.put("/locations/:id", updateLocation);
+router.delete("/locations/:id", deleteLocation);
 
 export default router;
