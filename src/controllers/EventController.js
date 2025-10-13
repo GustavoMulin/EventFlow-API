@@ -1,38 +1,6 @@
 // Banco em memória
 let events = [];
 
-// Listar todos os eventos
-export function getAllEvents(res, res) {
-    try {
-        res.json(events)
-    } catch (error) {
-        res.status(500).json({
-            message: "Erro ao listar eventos.",
-            error: error.message
-        })
-    }
-}
-
-// Buscar evento por ID
-export function getEventById(req, res) {
-    try {
-        const { id } = req.params;
-        const event = events.find(e => e.id === parseInt(id));
-
-        if (!event) return res.status(404).json({
-            message: "Evento não encontrado."
-        })
-
-        res.json(event);
-
-    } catch (error) {
-        res.status(500).json({
-            message: "Erro ao buscar evento.",
-            error: error.message
-        })
-    }
-}
-
 // Criar novo evento
 export function createEvent(req, res) {
     try {
@@ -68,6 +36,39 @@ export function createEvent(req, res) {
         })
     }
 }
+
+// Listar todos os eventos
+export function getAllEvents(req, res) {
+    try {
+        res.json(events)
+    } catch (error) {
+        res.status(500).json({
+            message: "Erro ao listar eventos.",
+            error: error.message
+        })
+    }
+}
+
+// Buscar evento por ID
+export function getEventById(req, res) {
+    try {
+        const { id } = req.params;
+        const event = events.find(e => e.id === parseInt(id));
+
+        if (!event) return res.status(404).json({
+            message: "Evento não encontrado."
+        })
+
+        res.json(event);
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Erro ao buscar evento.",
+            error: error.message
+        })
+    }
+}
+
 
 // Atualizar evento
 export function updateEvent(req, res) {
