@@ -1,5 +1,6 @@
 import express from "express";
 import { register, login, listUsers } from "../controllers/AuthController.js";
+import { authMiddleware } from "../middlewares/AuthMiddleware.js";
 import {
   getAllEvents,
   getEventById,
@@ -28,6 +29,11 @@ const router = express.Router();
 router.post("/auth/register", register);
 router.post("/auth/login", login);
 router.get("/users", listUsers);
+
+// Rotas protegidas
+router.post("/", authMiddleware, createEvent);
+router.put("/:id", authMiddleware, updateEvent);
+router.delete("/:id", authMiddleware, deleteEvent);
 
 // Event routes
 router.get("/events", getAllEvents);
