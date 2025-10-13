@@ -8,6 +8,13 @@ import {
   deleteEvent
 } from "../controllers/EventController.js";
 
+import {
+  getAllCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory
+} from "../controllers/CategoryController.js";
+
 const router = express.Router();
 
 // Auth routes
@@ -21,5 +28,11 @@ router.get("/events/:id", getEventById);
 router.post("/events", createEvent);
 router.put("/events/:id", updateEvent);
 router.delete("/events/:id", deleteEvent);
+
+// Category routes
+router.get("/categories", getAllCategories);
+router.post("/categories", createCategory);
+router.put("/categories/:id", updateCategory);
+router.delete("/categories/:id", deleteCategory);
 
 export default router;
