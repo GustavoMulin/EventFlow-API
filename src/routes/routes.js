@@ -1,6 +1,13 @@
 import express from "express";
-import { register, login, listUsers } from "../controllers/AuthController.js";
-import { authMiddleware } from "../middlewares/AuthMiddleware.js";
+import { register, login, getProfile } from "../controllers/AuthController.js";
+import  { authMiddleware }  from "../Middleware/AuthMiddleware.js";
+import {
+  getAllCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory
+} from "../controllers/CategoryController.js";
+
 import {
   getAllEvents,
   getEventById,
@@ -9,12 +16,6 @@ import {
   deleteEvent
 } from "../controllers/EventController.js";
 
-import {
-  getAllCategories,
-  createCategory,
-  updateCategory,
-  deleteCategory
-} from "../controllers/CategoryController.js";
 
 import {
   getAllLocations,
@@ -28,41 +29,31 @@ const router = express.Router();
 // Auth routes
 router.post("/auth/register", register);
 router.post("/auth/login", login);
-router.get("/users", listUsers);
+router.get("/profile", getProfile);
+
+// Category routes
+router.get("/categories", getAllCategories);
+
+// Protected Category routes
+router.post("/categories", authMiddleware, createCategory);
+router.put("/categories:id", authMiddleware, updateCategory);
+router.delete("/categories:id", authMiddleware, deleteCategory);
 
 // Event routes
 router.get("/events", getAllEvents);
 router.get("/events/:id", getEventById);
-router.post("/events", createEvent);
-router.put("/events/:id", updateEvent);
-router.delete("/events/:id", deleteEvent);
 
 // Protected Event routes
 router.post("/events", authMiddleware, createEvent);
 router.put("/events/:id", authMiddleware, updateEvent);
 router.delete("/events/:id", authMiddleware, deleteEvent);
 
-// Category routes
-router.get("/categories", getAllCategories);
-router.post("/categories", createCategory);
-router.put("/categories/:id", updateCategory);
-router.delete("/categories/:id", deleteCategory);
-
-// Protected Category routes
-router.post("/", authMiddleware, createCategory);
-router.put("/:id", authMiddleware, updateCategory);
-router.delete("/:id", authMiddleware, deleteCategory);
-
-
 // Location routes
 router.get("/locations", getAllLocations);
-router.post("/locations", createLocation);
-router.put("/locations/:id", updateLocation);
-router.delete("/locations/:id", deleteLocation);
 
 // Protected Location routes
-router.post("/", authMiddleware, createLocation);
-router.put("/:id", authMiddleware, updateLocation);
-router.delete("/:id", authMiddleware, deleteLocation);
+router.post("/locations", authMiddleware, createLocation);
+router.put("/locations:id", authMiddleware, updateLocation);
+router.delete("/locations:id", authMiddleware, deleteLocation);
 
 export default router;
