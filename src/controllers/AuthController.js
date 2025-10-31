@@ -55,12 +55,10 @@ export async function login(req, res) {
   }
 }
 
-export async function getProfile(req, res) {
+export const getProfile = (req, res) => {
   try {
-    const user = await Users.findById(req.user.id).select("-password");
-    if (!user) return res.status(404).json({ message: "Usuário não encontrado." });
-    res.json(user);
+    res.json(req.user);
   } catch (error) {
-    res.status(500).json({ message: "Erro ao buscar perfil.", error: error.message });
+    res.status(500).json({ message: "Erro ao carregar perfil" });
   }
-}
+};

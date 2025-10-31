@@ -1,6 +1,6 @@
 import express from "express";
 import { register, login, getProfile } from "../controllers/AuthController.js";
-import  { authMiddleware }  from "../Middleware/AuthMiddleware.js";
+import { authMiddleware } from "../Middleware/AuthMiddleware.js";
 import {
   getAllCategories,
   createCategory,
@@ -29,7 +29,7 @@ const router = express.Router();
 // Auth routes
 router.post("/auth/register", register);
 router.post("/auth/login", login);
-router.get("/profile", getProfile);
+router.get("/profile", authMiddleware, getProfile);
 
 // Category routes
 router.get("/categories", getAllCategories);
