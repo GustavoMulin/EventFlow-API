@@ -13,7 +13,8 @@ import {
   getEventById,
   createEvent,
   updateEvent,
-  deleteEvent
+  deleteEvent,
+  upload
 } from "../controllers/EventController.js";
 
 
@@ -35,9 +36,10 @@ router.get("/profile", authMiddleware, getProfile);
 router.get("/categories", getAllCategories);
 
 // Protected Category routes
-router.post("/categories", authMiddleware, createCategory);
-router.put("/categories:id", authMiddleware, updateCategory);
-router.delete("/categories:id", authMiddleware, deleteCategory);
+// router.post("/categories", authMiddleware, createCategory);
+router.post("/events", authMiddleware, upload.single("image"), createEvent);
+router.put("/categories/:id", authMiddleware, updateCategory);
+router.delete("/categories/:id", authMiddleware, deleteCategory);
 
 // Event routes
 router.get("/events", getAllEvents);
