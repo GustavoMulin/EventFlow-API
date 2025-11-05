@@ -7,7 +7,6 @@ const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const dir = "uploads/";
 
-    // Cria a pasta se não existir
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
@@ -15,13 +14,12 @@ const storage = multer.diskStorage({
     cb(null, dir);
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // exemplo: 1699123456.jpg
+    cb(null, Date.now() + path.extname(file.originalname));
   },
 });
 
 const upload = multer({ storage });
 
-// Listar todos os eventos
 export const getAllEvents = async (req, res) => {
   try {
     const events = await Event.find();
@@ -31,7 +29,6 @@ export const getAllEvents = async (req, res) => {
   }
 };
 
-// Buscar evento por ID
 export const getEventById = async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
@@ -44,7 +41,6 @@ export const getEventById = async (req, res) => {
   }
 };
 
-// Criar evento (com imagem)
 export const createEvent = async (req, res) => {
   try {
     const { name, description, date, price, latitude, longitude } = req.body;
@@ -69,7 +65,6 @@ export const createEvent = async (req, res) => {
   }
 };
 
-// Atualizar evento
 export const updateEvent = async (req, res) => {
   try {
     const { id } = req.params;
@@ -85,7 +80,6 @@ export const updateEvent = async (req, res) => {
   }
 };
 
-// Deletar evento
 export const deleteEvent = async (req, res) => {
   try {
     const { id } = req.params;
