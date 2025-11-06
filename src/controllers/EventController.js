@@ -68,7 +68,14 @@ export const createEvent = async (req, res) => {
 export const updateEvent = async (req, res) => {
   try {
     const { id } = req.params;
-    const event = await Event.findByIdAndUpdate(id, req.body, { new: true });
+
+    const updatedData = { ...req.body };
+
+    if (req.file) {
+      updatedData.image = `/uploads/${req.file.filename}`;
+    }
+
+    const event = await Event.findByIdAndUpdate(id, updatedData, { new: true });
 
     if (!event) {
       return res.status(404).json({ message: "Evento não encontrado" });
@@ -76,22 +83,46 @@ export const updateEvent = async (req, res) => {
 
     res.json({ message: "Evento atualizado com sucesso", event });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Erro ao atualizar evento", error });
   }
 };
 
+
 export const deleteEvent = async (req, res) => {
   try {
+    console.log("DELETE /api/events/:id called. params:", req.params, "user:", req.user?.id);
     const { id } = req.params;
-    const event = await Event.findByIdAndDelete(id);
-
+    const event = await Event.findById(id);
     if (!event) {
+      console.log("DELETE -> event not found", id);
       return res.status(404).json({ message: "Evento não encontrado" });
     }
 
-    res.json({ message: "Evento excluído com sucesso" });
+    if (event.image) {
+      const imagePath = event.image.startsWith("/") ? event.image.slice(1) : event.image;
+      const possible1 = path.join(process.cwd(), imagePath);
+      const possible2 = path.join(process.cwd(), "src", imagePath);
+      let filePath = null;
+      if (fs.existsSync(possible1)) filePath = possible1;
+      else if (fs.existsSync(possible2)) filePath = possible2;
+
+      if (filePath) {
+        fs.unlink(filePath, (err) => {
+          if (err) console.warn("DELETE -> couldn't remove file:", filePath, err.message);
+          else console.log("DELETE -> removed file:", filePath);
+        });
+      } else {
+        console.log("DELETE -> image file not found on disk:", imagePath, possible1, possible2);
+      }
+    }
+
+    await Event.findByIdAndDelete(id);
+    console.log("DELETE -> event removed from DB:", id);
+    return res.json({ message: "Evento excluído com sucesso" });
   } catch (error) {
-    res.status(500).json({ message: "Erro ao excluir evento", error });
+    console.error("DELETE -> error:", error);
+    return res.status(500).json({ message: "Erro ao excluir evento", error: error.message });
   }
 };
 

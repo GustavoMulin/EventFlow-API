@@ -34,26 +34,19 @@ router.get("/profile", authMiddleware, getProfile);
 
 // Category routes
 router.get("/categories", getAllCategories);
-
-// Protected Category routes
-// router.post("/categories", authMiddleware, createCategory);
-router.post("/events", authMiddleware, upload.single("image"), createEvent);
+router.post("/categories", authMiddleware, createCategory);
 router.put("/categories/:id", authMiddleware, updateCategory);
 router.delete("/categories/:id", authMiddleware, deleteCategory);
 
 // Event routes
+router.post("/events", authMiddleware, upload.single("image"), createEvent);
 router.get("/events", getAllEvents);
 router.get("/events/:id", getEventById);
-
-// Protected Event routes
-router.post("/events", authMiddleware, createEvent);
-router.put("/events/:id", authMiddleware, updateEvent);
+router.put("/events/:id", upload.single("image"), updateEvent);
 router.delete("/events/:id", authMiddleware, deleteEvent);
 
 // Location routes
 router.get("/locations", getAllLocations);
-
-// Protected Location routes
 router.post("/locations", authMiddleware, createLocation);
 router.put("/locations:id", authMiddleware, updateLocation);
 router.delete("/locations:id", authMiddleware, deleteLocation);
