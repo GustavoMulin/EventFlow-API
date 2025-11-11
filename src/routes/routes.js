@@ -48,7 +48,7 @@ router.delete("/events/:id", authMiddleware, deleteEvent);
 // Location routes
 router.get("/locations", getAllLocations);
 router.post("/locations", authMiddleware, createLocation);
-router.put("/locations:id", authMiddleware, updateLocation);
-router.delete("/locations:id", authMiddleware, deleteLocation);
+router.put("/locations/:id", authMiddleware, updateLocation);
+router.delete("/locations/:id", authMiddleware, deleteLocation);
 
 export default router;
