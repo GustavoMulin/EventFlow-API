@@ -3,7 +3,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
-
+import Location from "../models/LocationModels.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -52,7 +52,7 @@ export const getEventById = async (req, res) => {
 
 export const createEvent = async (req, res) => {
   try {
-    const { name, description, date, price, latitude, longitude } = req.body;
+    const { name, description, date, price, category, location } = req.body;
 
     const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
 
@@ -62,11 +62,13 @@ export const createEvent = async (req, res) => {
       date,
       price,
       image: imagePath,
-      latitude,
-      longitude,
+      category,
+      location
     });
 
-    await event.save();
+    const result = await event.save();
+    await Location.create({ latitude, longitude, eventId: result._id });
+    console.log(result);
     res.status(201).json({ message: "Evento criado com sucesso", event });
   } catch (error) {
     console.error(error);
