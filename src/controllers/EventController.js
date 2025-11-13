@@ -50,31 +50,28 @@ export const getEventById = async (req, res) => {
   }
 };
 
-export const createEvent = async (req, res) => {
+export async function createEvent(req, res) {
   try {
-    const { name, description, date, price, category, location } = req.body;
+    const { name, description, date, price, latitude, longitude, locationId } = req.body;
 
-    const imagePath = req.file ? `/uploads/${req.file.filename}` : null;
-
-    const event = new Event({
+    const newEvent = new Event({
       name,
       description,
       date,
       price,
-      image: imagePath,
-      category,
-      location
+      latitude,
+      longitude,
+      location: locationId,
+      image: req.file ? req.file.path : null,
     });
 
-    const result = await event.save();
-    await Location.create({ latitude, longitude, eventId: result._id });
-    console.log(result);
-    res.status(201).json({ message: "Evento criado com sucesso", event });
+    await newEvent.save();
+    res.status(201).json({ message: "Evento criado com sucesso!", event: newEvent });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Erro ao criar evento", error });
+    res.status(500).json({ message: "Erro ao criar evento", error: error.message });
   }
-};
+}
+
 
 export const updateEvent = async (req, res) => {
   try {
