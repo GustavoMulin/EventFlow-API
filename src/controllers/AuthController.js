@@ -11,14 +11,14 @@ export async function register(req, res) {
       return res.status(400).json({ message: "Preencha todos os campos." });
     }
 
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // if (!emailRegex.test(email)) {
-    //   return res.status(400).json({ message: "E-mail inválido." });
-    // }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "E-mail inválido." });
+    }
 
-    // if (password.length < 8) {
-    //   return res.status(400).json({ message: "A senha deve ter no mínimo 8 caracteres." });
-    // }
+    if (password.length < 8) {
+      return res.status(400).json({ message: "A senha deve ter no mínimo 8 caracteres." });
+    }
 
     const existingUser = await Users.findOne({ email });
     if (existingUser) {
