@@ -62,7 +62,7 @@ export async function createEvent(req, res) {
       latitude,
       longitude,
       location: locationId,
-      image: req.file ? req.file.path : null,
+      image: req.file ? `/uploads/${req.file.filename}` : null,
     });
 
     await newEvent.save();
@@ -71,6 +71,7 @@ export async function createEvent(req, res) {
     res.status(500).json({ message: "Erro ao criar evento", error: error.message });
   }
 }
+
 
 
 export const updateEvent = async (req, res) => {
