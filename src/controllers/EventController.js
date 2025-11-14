@@ -73,7 +73,6 @@ export async function createEvent(req, res) {
 }
 
 
-
 export const updateEvent = async (req, res) => {
   try {
     const { id } = req.params;
