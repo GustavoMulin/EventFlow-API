@@ -40,7 +40,9 @@ export const getAllEvents = async (req, res) => {
 
 export const getEventById = async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id);
+    const event = await Event.findById(req.params.id)
+      .populate("category", "name")
+      .populate("location", "address");
     if (!event) {
       return res.status(404).json({ message: "Evento não encontrado" });
     }
@@ -50,9 +52,10 @@ export const getEventById = async (req, res) => {
   }
 };
 
+
 export async function createEvent(req, res) {
   try {
-    const { name, description, date, price, latitude, longitude, locationId } = req.body;
+    const { name, description, date, price, latitude, longitude, locationId, category } = req.body;
 
     const newEvent = new Event({
       name,
@@ -62,11 +65,17 @@ export async function createEvent(req, res) {
       latitude,
       longitude,
       location: locationId,
+      category: category,
       image: req.file ? `/uploads/${req.file.filename}` : null,
     });
 
     await newEvent.save();
-    res.status(201).json({ message: "Evento criado com sucesso!", event: newEvent });
+
+    const eventPopulated = await Event.findById(newEvent._id)
+      .populate("category", "name")
+      .populate("location", "address");
+
+    res.status(201).json({ message: "Evento criado com sucesso!", event: eventPopulated });
   } catch (error) {
     res.status(500).json({ message: "Erro ao criar evento", error: error.message });
   }
