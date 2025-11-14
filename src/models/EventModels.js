@@ -6,6 +6,10 @@ const eventSchema = new mongoose.Schema({
   date: { type: String, required: true },
   price: Number,
   image: String,
+
+  latitude: Number,
+  longitude: Number,
+
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
@@ -16,6 +20,8 @@ const eventSchema = new mongoose.Schema({
     ref: "Location",
     required: false
   }
+
 }, { timestamps: true });
+
 
 export default mongoose.model("Event", eventSchema);
